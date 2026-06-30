@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Structural Elucidation Console</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <h1>Structural Elucidation Builder</h1>
+          <p>Make a Codex-ready JSON brief for 9476 structural elucidation questions.</p>
+        </div>
+        <div class="status">
+          <span class="dot"></span>
+          H2 Chemistry 9476 guardrails enabled
+        </div>
+      </header>
+
+      <section class="panel quick-guide">
+        <div>
+          <strong>1. Choose a recipe</strong>
+          <span>Start with a ready-made 9476-safe question pattern.</span>
+        </div>
+        <div>
+          <strong>2. Download JSON</strong>
+          <span>The JSON tells Codex exactly what kind of question to generate.</span>
+        </div>
+        <div>
+          <strong>3. Paste into Codex</strong>
+          <span>Ask Codex to use the included skill and generate the worksheet/PDF.</span>
+        </div>
+      </section>
+
+      <section class="layout">
+        <aside class="panel controls">
+          <div class="section-title">
+            <h2>1. Start with a ready recipe</h2>
+            <p>Use a complete 9476-safe setup first, then tweak only what you need.</p>
+          </div>
+          <div id="presets" class="preset-grid"></div>
+
+          <div class="section-title">
+            <h2>2. Pick chapters taught</h2>
+            <p>Only 9476 organic chemistry chapters are available.</p>
+          </div>
+          <div id="chapters" class="chip-grid"></div>
+
+          <div class="section-title">
+            <h2>3. Pick tests / reagents</h2>
+            <p>Formulae are shown with proper subscripts; exported JSON keeps plain and display labels.</p>
+          </div>
+          <div class="toolbar">
+            <button id="selectRecommended" type="button">Suggest from chapters</button>
+            <button id="clearTests" type="button">Clear tests</button>
+          </div>
+          <div id="tests" class="chip-grid compact"></div>
+
+          <div class="section-title">
+            <h2>4. Pick reasoning skills</h2>
+            <p>These control the kind of deductions Codex should build into the question.</p>
+          </div>
+          <div id="skills" class="chip-grid"></div>
+
+          <div class="section-title">
+            <h2>5. Choose output</h2>
+            <p>Defaults generate a printable worksheet with black code-generated structures.</p>
+          </div>
+          <div class="form-grid">
+            <label>
+              Difficulty
+              <select id="difficulty">
+                <option value="1">1 - deduction drills</option>
+                <option value="2">2 - discriminate alternatives</option>
+                <option value="3" selected>3 - one full unknown</option>
+                <option value="4">4 - transformation product</option>
+                <option value="5">5 - reaction network</option>
+                <option value="6">6 - proof / ambiguity</option>
+              </select>
+            </label>
+            <label>
+              Questions
+              <input id="questionCount" type="number" min="1" max="8" value="2">
+            </label>
+            <label>
+              Output
+              <select id="outputFormat">
+                <option value="pdf" selected>PDF</option>
+                <option value="markdown">Markdown</option>
+                <option value="json">JSON draft only</option>
+              </select>
+            </label>
+            <label>
+              Structure style
+              <select id="structureStyle">
+                <option value="black_rdkit" selected>Black RDKit diagrams</option>
+                <option value="black_rdkit_with_product_diagrams">Black RDKit + product diagrams</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="section-title">
+            <h2>6. Choose question style</h2>
+            <p>Pick the worksheet shape: paragraph, network, scaffolded, or product diagrams.</p>
+          </div>
+          <div id="styles" class="chip-grid"></div>
+
+          <label class="notes">
+            Extra teacher notes
+            <textarea id="notes" rows="5" placeholder="e.g. Avoid carbonyl questions this time. Include one product diagram. Make answers concise."></textarea>
+          </label>
+        </aside>
+
+        <section class="panel preview">
+          <div class="preview-header">
+            <div>
+              <h2>Ready brief</h2>
+              <p>Most users only need Download JSON, then paste the Codex prompt.</p>
+            </div>
+            <div class="actions">
+              <button id="copyJson" type="button">Copy JSON</button>
+              <button id="downloadJson" type="button">Download JSON</button>
+              <button id="copyPrompt" type="button">Copy Codex prompt</button>
+            </div>
+          </div>
+          <div id="briefSummary" class="brief-summary"></div>
+
+          <h2>Generated JSON brief</h2>
+          <pre id="jsonPreview"></pre>
+
+          <h2>Codex prompt</h2>
+          <pre id="promptPreview"></pre>
+
+          <div class="server-actions">
+            <button id="saveSpec" type="button">Save JSON + prompt</button>
+            <button id="runCodex" type="button" class="primary">Run Codex CLI</button>
+            <p id="serverResult"></p>
+          </div>
+
+          <h2>9476 exclusions</h2>
+          <div id="excluded" class="exclusions"></div>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
