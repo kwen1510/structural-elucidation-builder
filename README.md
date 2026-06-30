@@ -1,5 +1,9 @@
 # Structural Elucidation Builder
 
+![One-shot guide to using the Structural Elucidation Builder](assets/structural-elucidation-builder-guide.gif)
+
+[Download the MP4 guide](assets/structural-elucidation-builder-guide.mp4)
+
 This repo contains:
 
 - a Codex skill for generating 9476-aligned structural elucidation questions
@@ -101,3 +105,24 @@ For the best result, ask for:
 ```text
 PDF worksheet with student questions, generated skeletal structures, and answer keys in clue/deduction tables.
 ```
+
+## 7. Regenerate the README guide
+
+The README guide is generated from code.
+
+Requirements:
+
+- Node.js
+- FFmpeg
+
+Then run:
+
+```bash
+npm install
+npm run generate-demo
+```
+
+This regenerates:
+
+- `assets/structural-elucidation-builder-guide.gif`
+- `assets/structural-elucidation-builder-guide.mp4`

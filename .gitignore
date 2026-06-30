@@ -2,6 +2,7 @@ node_modules/
 .DS_Store
 output/
 tmp/
+assets/demo-frames/
 *.pyc
 __pycache__/
 .venv/

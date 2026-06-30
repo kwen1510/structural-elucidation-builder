@@ -1,0 +1,12 @@
+{
+  "name": "structural-elucidation-builder",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate-demo": "node scripts/generate-readme-demo.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}
