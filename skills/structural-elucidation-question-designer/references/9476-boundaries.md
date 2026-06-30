@@ -2,6 +2,14 @@
 
 Use the Singapore-Cambridge H2 Chemistry 9476 syllabus as the chemistry boundary. The older worksheet may guide phrasing, but 9476 determines what may be assumed.
 
+Detailed grounding source:
+
+- `references/syllabus/9476-organic-chemistry-extract.md`
+- Source PDF: `references/syllabus/9476_y26_sy.pdf`
+- Official PDF URL: https://isomer-user-content.by.gov.sg/334/27f4955c-bfc7-4619-a012-12979bb91890/9476_y26_sy.pdf
+
+When there is any doubt, use the detailed syllabus extract rather than this compact checklist.
+
 ## Allowed Organic Content
 
 - Formulae, structural/displayed/skeletal formulae, empirical/molecular formulae.

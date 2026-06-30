@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate-demo": "node scripts/generate-readme-demo.mjs"
+    "generate-demo": "node scripts/generate-readme-demo.mjs",
+    "check-syllabus": "node scripts/check-syllabus-grounding.mjs"
   },
   "dependencies": {
     "sharp": "^0.33.5"
