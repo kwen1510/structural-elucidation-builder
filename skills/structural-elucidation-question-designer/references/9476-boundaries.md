@@ -2,20 +2,21 @@
 
 Use the Singapore-Cambridge H2 Chemistry 9476 syllabus as the chemistry boundary. The older worksheet may guide phrasing, but 9476 determines what may be assumed.
 
-Detailed grounding source:
+Optional local grounding source:
 
-- `references/syllabus/9476-organic-chemistry-extract.md`
-- Source PDF: `references/syllabus/9476_y26_sy.pdf`
 - Official PDF URL: https://isomer-user-content.by.gov.sg/334/27f4955c-bfc7-4619-a012-12979bb91890/9476_y26_sy.pdf
+- If you have the right to keep a local copy, you may place a local extract at `references/syllabus/9476-organic-chemistry-extract.md`.
 
-When there is any doubt, use the detailed syllabus extract rather than this compact checklist.
+When there is any doubt, use the official 9476 syllabus or a locally supplied extract rather than extending this compact checklist.
 
 ## Allowed Organic Content
 
 - Formulae, structural/displayed/skeletal formulae, empirical/molecular formulae.
+- Unsaturation reasoning from formulae and tests, including C=C detection.
+- Carbonyl chemistry for aldehydes and ketones.
 - Constitutional isomerism, cis-trans isomerism, chirality, optical activity.
 - Alkanes, alkenes, arenes, halogenoalkanes, alcohols, phenol, aldehydes, ketones, carboxylic acids, acyl chlorides, esters, amines, amides, amino acids, nitriles, and relevant polymers.
-- Oxidation/reduction, hydrolysis, substitution, elimination, electrophilic addition/substitution, nucleophilic addition of HCN, esterification, acyl chloride reactions, amide/nitrile hydrolysis.
+- Oxidation/reduction, hydrolysis, nucleophilic substitution, elimination, electrophilic addition/substitution, nucleophilic addition of HCN, esterification, acyl chloride reactions, amide/nitrile hydrolysis.
 - Organic qualitative tests: Br2(aq), Br2 in organic solvent for C=C, halogenoalkane hydrolysis then Ag+(aq), PCl5 fumes, acidified KMnO4, alkaline I2, 2,4-DNPH, Fehling's, Tollens', Na2CO3, and NH3/CO2/H2 gas tests.
 
 ## Do Not Assume

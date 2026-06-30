@@ -10,9 +10,9 @@ Create 9476-aligned structural elucidation questions by starting from the answer
 ## Core Workflow
 
 1. Confirm the question is within H2 Chemistry 9476 organic chemistry boundaries.
-   - Read `references/syllabus/9476-organic-chemistry-extract.md` as the detailed syllabus grounding source.
    - Read `references/9476-boundaries.md` as the compact allowed/excluded checklist.
-   - If the detailed syllabus extract does not support a requested reaction, test, term, or assumption, treat it as outside routine 9476 unless the question explicitly supplies it as new data.
+   - If the user has locally provided `references/syllabus/9476-organic-chemistry-extract.md`, read it as the detailed syllabus grounding source.
+   - If the detailed local extract does not support a requested reaction, test, term, or assumption, treat it as outside routine 9476 unless the question explicitly supplies it as new data.
 2. Choose the target structure or reaction network first.
 3. Write SMILES for every target/product/intermediate structure that needs a diagram.
 4. Validate and draw structures with RDKit.
@@ -34,7 +34,7 @@ Create 9476-aligned structural elucidation questions by starting from the answer
 7. Write the answer key as observation -> deduction -> structure.
 8. Check the final question:
    - all chemistry is 9476-allowed
-   - all selected clues can be traced to `references/syllabus/9476-organic-chemistry-extract.md` or to explicitly supplied question data
+   - all selected clues can be traced to `references/9476-boundaries.md`, a locally supplied syllabus extract, or explicitly supplied question data
    - all SMILES parse in RDKit
    - formulae match question text
    - the intended answer is unique unless the question asks for possible structures

@@ -8,7 +8,7 @@ This repo contains:
 
 - a Codex skill for generating 9476-aligned structural elucidation questions
 - a simple local app that helps you choose chapters/tests and export a JSON brief
-- the official SEAB 9476 2026 syllabus PDF and a selected Markdown extract used to ground the skill
+- a compact, non-verbatim 9476 boundary checklist for grounding the skill
 
 ## 1. Copy the skill into Codex
 
@@ -58,7 +58,13 @@ In the app:
 
 The app only shows 9476-safe options.
 
-The skill grounds its chemistry using:
+The skill grounds its chemistry using the compact checklist:
+
+```text
+skills/structural-elucidation-question-designer/references/9476-boundaries.md
+```
+
+If you have the right to keep a local copy of the official syllabus, you may add a local-only extract here:
 
 ```text
 skills/structural-elucidation-question-designer/references/syllabus/9476-organic-chemistry-extract.md
@@ -142,4 +148,4 @@ Run:
 npm run check-syllabus
 ```
 
-This verifies that the skill points to the selected 9476 syllabus extract and that the extract contains the organic chemistry and qualitative-analysis grounding needed by the generator.
+This verifies that the skill points to the compact 9476 boundary checklist, and also checks an optional local syllabus extract if you have added one.

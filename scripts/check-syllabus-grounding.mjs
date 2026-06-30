@@ -1,4 +1,4 @@
-import { readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,9 +10,7 @@ const extractPath = path.join(skillDir, "references", "syllabus", "9476-organic-
 const pdfPath = path.join(skillDir, "references", "syllabus", "9476_y26_sy.pdf");
 
 function assert(condition, message) {
-  if (!condition) {
-    throw new Error(message);
-  }
+  if (!condition) throw new Error(message);
 }
 
 function read(file) {
@@ -21,19 +19,17 @@ function read(file) {
 
 const skill = read(skillPath);
 const boundary = read(boundaryPath);
-const extract = read(extractPath);
-const extractLower = extract.toLowerCase();
+const boundaryLower = boundary.toLowerCase();
 
-assert(skill.includes("references/syllabus/9476-organic-chemistry-extract.md"), "SKILL.md must reference the detailed syllabus extract.");
-assert(skill.includes("references/9476-boundaries.md"), "SKILL.md must still reference the compact boundary checklist.");
-assert(boundary.includes("9476-organic-chemistry-extract.md"), "Boundary checklist must point to the detailed syllabus extract.");
-assert(statSync(pdfPath).size > 100000, "Official syllabus PDF should be present and non-empty.");
-assert(extract.length > 20000, "Syllabus Markdown extract is unexpectedly short.");
+assert(skill.includes("references/syllabus/9476-organic-chemistry-extract.md"), "SKILL.md must mention the optional detailed syllabus extract.");
+assert(skill.includes("references/9476-boundaries.md"), "SKILL.md must reference the compact boundary checklist.");
+assert(boundary.includes("Official PDF URL:"), "Boundary checklist should cite the official syllabus URL instead of bundling the document.");
+assert(boundary.includes("9476-organic-chemistry-extract.md"), "Boundary checklist should mention the optional local extract path.");
 
 const requiredGrounding = [
-  "2,4-dinitrophenylhydrazine",
-  "alkaline i2",
-  "acidified kmno4",
+  "2,4-DNPH",
+  "alkaline I2",
+  "acidified KMnO4",
   "halogenoalkanes",
   "nucleophilic substitution",
   "elimination",
@@ -44,23 +40,29 @@ const requiredGrounding = [
   "amines",
   "amides",
   "nitriles",
-  "qualitative organic analysis",
   "unsaturation",
   "carbonyl",
 ];
 
 for (const phrase of requiredGrounding) {
-  assert(extractLower.includes(phrase), `Missing syllabus grounding phrase: ${phrase}`);
+  assert(boundaryLower.includes(phrase.toLowerCase()), `Missing compact grounding phrase: ${phrase}`);
 }
 
-const boundaryLower = boundary.toLowerCase();
-const explicitlyExcluded = ["grignard", "ozonolysis", "nmr", "diastereomer"];
-for (const phrase of explicitlyExcluded) {
+const controlledItems = ["grignard", "ozonolysis", "nmr", "diastereomer"];
+for (const phrase of controlledItems) {
   assert(boundaryLower.includes(phrase), `Boundary checklist should explicitly control or exclude: ${phrase}`);
 }
-assert(extractLower.includes("diastereomers is not required"), "Syllabus extract should preserve the diastereomer terminology boundary.");
+
+if (existsSync(extractPath)) {
+  const extract = read(extractPath);
+  assert(extract.length > 20000, "Optional local syllabus Markdown extract is unexpectedly short.");
+  console.log("Optional local syllabus extract found and checked.");
+} else {
+  console.log("No optional local syllabus extract found; using compact non-verbatim boundary checklist.");
+}
 
 console.log("Syllabus grounding check passed.");
 console.log(`Skill: ${path.relative(root, skillPath)}`);
-console.log(`Extract: ${path.relative(root, extractPath)}`);
-console.log(`PDF: ${path.relative(root, pdfPath)}`);
+console.log(`Boundary: ${path.relative(root, boundaryPath)}`);
+console.log(`Optional extract path: ${path.relative(root, extractPath)}`);
+console.log(`Optional PDF path: ${path.relative(root, pdfPath)}`);

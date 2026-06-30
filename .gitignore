@@ -3,6 +3,8 @@ node_modules/
 output/
 tmp/
 assets/demo-frames/
+skills/structural-elucidation-question-designer/references/syllabus/*.pdf
+skills/structural-elucidation-question-designer/references/syllabus/9476-organic-chemistry-extract.md
 *.pyc
 __pycache__/
 .venv/
