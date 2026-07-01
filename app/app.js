@@ -5,7 +5,9 @@ const state = {
   chapters: new Set(["alcohols", "carbonyls", "carboxylic-acids"]),
   tests: new Set(["sodium-carbonate", "dichromate", "dnph", "tollens", "iodoform"]),
   skills: new Set(["functional_group_deduction", "oxidation_products", "negative_clue_elimination"]),
-  styles: new Set(["paragraph_heavy", "with_product_diagram"])
+  styles: new Set(["paragraph_heavy", "with_product_diagram"]),
+  questionMode: "standard_9476",
+  providedReactions: new Set()
 };
 
 const $ = (id) => document.getElementById(id);
@@ -80,6 +82,24 @@ function chip(item, group, set) {
   group.appendChild(button);
 }
 
+function providedReactionChip(item, group) {
+  const button = document.createElement("button");
+  button.type = "button";
+  const enabled = state.questionMode === "provided_unfamiliar_reaction";
+  button.className = `chip ${state.providedReactions.has(item.id) ? "active" : ""} ${enabled ? "" : "disabled"}`;
+  button.innerHTML = chemHtml(item.label);
+  button.title = displayChem(item.shortLabel || item.label);
+  button.setAttribute("aria-label", item.label);
+  button.disabled = !enabled;
+  button.addEventListener("click", () => {
+    state.preset = "custom";
+    state.providedReactions.clear();
+    state.providedReactions.add(item.id);
+    render();
+  });
+  group.appendChild(button);
+}
+
 function selectedTestsFromChapters() {
   const selected = new Set();
   for (const chapter of catalog.chapters) {
@@ -98,10 +118,13 @@ function applyPreset(presetId) {
   state.tests = new Set(preset.tests);
   state.skills = new Set(preset.skills);
   state.styles = new Set(preset.styles);
+  state.questionMode = preset.questionMode || "standard_9476";
+  state.providedReactions = new Set(preset.providedReactions || []);
   $("difficulty").value = String(preset.difficulty);
   $("questionCount").value = String(preset.questionCount);
   $("outputFormat").value = preset.outputFormat;
   $("structureStyle").value = preset.structureStyle;
+  $("questionMode").value = state.questionMode;
   render();
 }
 
@@ -110,10 +133,13 @@ function makeSpec() {
   const tests = catalog.tests.filter((item) => state.tests.has(item.id));
   const skills = catalog.skills.filter((item) => state.skills.has(item.id));
   const styles = catalog.styles.filter((item) => state.styles.has(item.id));
+  const providedReactions = catalog.providedReactions.filter((item) => state.providedReactions.has(item.id));
   const preset = catalog.presets.find((item) => item.id === state.preset);
+  const questionMode = $("questionMode").value;
 
   return {
     syllabus: "9476",
+    question_mode: questionMode,
     recipe: preset ? {
       id: preset.id,
       label: preset.label,
@@ -129,7 +155,14 @@ function makeSpec() {
       excluded: catalog.excluded,
       require_answer_key_format: "clue_deduction_table",
       require_generated_structures: true,
-      structure_rendering: $("structureStyle").value
+      structure_rendering: $("structureStyle").value,
+      supplied_unfamiliar_reaction_policy: {
+        enabled: questionMode === "provided_unfamiliar_reaction",
+        max_non_syllabus_patterns_per_question: questionMode === "provided_unfamiliar_reaction" ? 1 : 0,
+        must_be_taught_in_stem: true,
+        must_explain_pattern_in_answer: true,
+        all_other_chemistry_must_be_9476: true
+      }
     },
     output: {
       format: $("outputFormat").value,
@@ -147,18 +180,35 @@ function makeSpec() {
         deduction: item.deduction,
         display_deduction: displayChem(item.deduction),
         chapter: item.chapter
+      })),
+      provided_reaction_patterns: providedReactions.map((item) => ({
+        id: item.id,
+        label: item.label,
+        display_label: displayChem(item.label),
+        short_label: item.shortLabel,
+        student_pattern: item.student_pattern,
+        answer_pattern: item.answer_pattern,
+        validation: item.validation
       }))
     },
     difficulty: Number($("difficulty").value),
+    difficulty_category: questionMode === "provided_unfamiliar_reaction"
+      ? "provided_unfamiliar_reaction"
+      : "standard_easy_to_hard",
     teacher_notes: $("notes").value.trim(),
     generation_instructions: [
       "Use $structural-elucidation-question-designer.",
-      "Generate only 9476-safe chemistry.",
+      questionMode === "provided_unfamiliar_reaction"
+        ? "Use exactly one supplied unfamiliar reaction pattern, teach it in the stem, and keep all other chemistry 9476-safe."
+        : "Generate only 9476-safe chemistry.",
       "Use paragraph-heavy worksheet phrasing where appropriate.",
       "Use black RDKit diagrams for all structures.",
       "Answers must be in clue / deduction table format.",
+      "For answer keys, phrase rows as Evidence / Deductions / Marks where marks are useful.",
       "Check molecular formulae against generated structures.",
-      "Avoid spectroscopy, ozonolysis, Grignard reagents, E/Z terminology and diastereomer terminology."
+      questionMode === "provided_unfamiliar_reaction"
+        ? "In the answer sheet, describe what the supplied pattern adds, removes, connects, breaks or converts."
+        : "Avoid spectroscopy, ozonolysis, Grignard reagents, E/Z terminology and diastereomer terminology."
     ]
   };
 }
@@ -167,12 +217,14 @@ function makePrompt(spec) {
   return `Use $structural-elucidation-question-designer to generate a structural elucidation worksheet from this JSON brief.
 
 Requirements:
-- Stay strictly within Singapore-Cambridge H2 Chemistry 9476.
+- Stay strictly within Singapore-Cambridge H2 Chemistry 9476, except for exactly one supplied unfamiliar pattern when the JSON mode requests it.
 - Use the selected chapters, reagents/tests and reasoning skills only.
 - Make questions chemically correct and exam-style.
+- If using a supplied unfamiliar reaction, teach the pattern in the question stem with a simple example.
 - Use paragraph-heavy phrasing when requested.
 - Generate all structures from SMILES with black RDKit diagrams.
-- Provide answer keys as clue / deduction tables.
+- Provide answer keys as Evidence / Deductions / Marks tables where appropriate.
+- Explain what any supplied unfamiliar pattern adds, removes, connects, breaks or converts.
 - Verify formulas, products and answer uniqueness.
 - Export the requested format in this workspace.
 
@@ -221,10 +273,12 @@ function renderChips() {
   $("tests").replaceChildren();
   $("skills").replaceChildren();
   $("styles").replaceChildren();
+  $("providedReactions").replaceChildren();
   catalog.chapters.forEach((item) => chip(item, $("chapters"), state.chapters));
   catalog.tests.forEach((item) => chip(item, $("tests"), state.tests));
   catalog.skills.forEach((item) => chip(item, $("skills"), state.skills));
   catalog.styles.forEach((item) => chip(item, $("styles"), state.styles));
+  catalog.providedReactions.forEach((item) => providedReactionChip(item, $("providedReactions")));
   $("excluded").replaceChildren(...catalog.excluded.map((text) => {
     const span = document.createElement("span");
     span.className = "exclusion";
@@ -238,6 +292,7 @@ function renderSummary(spec) {
     ["Questions", String(spec.output.question_count)],
     ["Level", String(spec.difficulty)],
     ["Output", spec.output.format.toUpperCase()],
+    ["Mode", spec.question_mode === "provided_unfamiliar_reaction" ? "Supplied pattern" : "9476 only"],
     ["Chapters", String(spec.scope.chapters.length)],
     ["Tests", String(spec.scope.reagents_and_tests.length)],
     ["Structures", "Black RDKit"]
@@ -256,6 +311,15 @@ function renderSummary(spec) {
 }
 
 function render() {
+  state.questionMode = $("questionMode").value;
+  if (state.questionMode !== "provided_unfamiliar_reaction") {
+    state.providedReactions.clear();
+  } else if (state.providedReactions.size === 0 && catalog.providedReactions[0]) {
+    state.providedReactions.add(catalog.providedReactions[0].id);
+  } else if (state.providedReactions.size > 1) {
+    const first = state.providedReactions.values().next().value;
+    state.providedReactions = new Set([first]);
+  }
   renderChips();
   const spec = makeSpec();
   const prompt = makePrompt(spec);
@@ -284,7 +348,7 @@ async function post(path, body) {
 }
 
 function bind() {
-  ["difficulty", "questionCount", "outputFormat", "structureStyle", "notes"].forEach((id) => {
+  ["difficulty", "questionCount", "outputFormat", "structureStyle", "questionMode", "notes"].forEach((id) => {
     $(id).addEventListener("input", () => {
       state.preset = "custom";
       render();

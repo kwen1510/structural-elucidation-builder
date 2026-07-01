@@ -70,6 +70,13 @@
           </div>
           <div class="form-grid">
             <label>
+              Question mode
+              <select id="questionMode">
+                <option value="standard_9476" selected>9476 only</option>
+                <option value="provided_unfamiliar_reaction">Provided unfamiliar reaction</option>
+              </select>
+            </label>
+            <label>
               Difficulty
               <select id="difficulty">
                 <option value="1">1 - deduction drills</option>
@@ -102,7 +109,13 @@
           </div>
 
           <div class="section-title">
-            <h2>6. Choose question style</h2>
+            <h2>6. Optional supplied reaction</h2>
+            <p>Use only in provided-reaction mode. Codex will teach this one pattern in the question stem.</p>
+          </div>
+          <div id="providedReactions" class="chip-grid compact"></div>
+
+          <div class="section-title">
+            <h2>7. Choose question style</h2>
             <p>Pick the worksheet shape: paragraph, network, scaffolded, or product diagrams.</p>
           </div>
           <div id="styles" class="chip-grid"></div>

@@ -13,6 +13,7 @@ This repo contains:
 - a Codex skill for generating 9476-aligned structural elucidation questions
 - a simple local app that helps you choose chapters/tests and export a JSON brief
 - a compact, non-verbatim 9476 boundary checklist for grounding the skill
+- an optional supplied-reaction mode where one unfamiliar pattern is taught in the stem and explained in the answer key
 
 ## 1. Copy the skill into Codex
 
@@ -58,9 +59,12 @@ In the app:
 
 1. Choose a ready recipe.
 2. Adjust chapters, tests or reasoning skills if needed.
-3. Click **Download JSON** or **Copy Codex prompt**.
+3. For a challenge question, choose **Provided unfamiliar reaction** and select exactly one supplied pattern.
+4. Click **Download JSON** or **Copy Codex prompt**.
 
-The app only shows 9476-safe options.
+The normal app options are 9476-safe. Supplied-reaction options are marked as stem-provided patterns, not assumed recall.
+
+In supplied-reaction mode, Codex must teach the unfamiliar pattern in the question stem. The answer key must explain what the pattern adds, removes, connects, breaks or converts.
 
 The skill grounds its chemistry using the compact checklist:
 
@@ -88,11 +92,12 @@ Codex should then:
 
 1. use the skill,
 2. stay within H2 Chemistry 9476,
-3. generate structures from SMILES,
-4. render black skeletal diagrams,
-5. create student questions,
-6. create answer keys in clue/deduction table format,
-7. check formulae and chemistry.
+3. use at most one supplied unfamiliar pattern if the JSON asks for that mode,
+4. generate structures from SMILES,
+5. render black skeletal diagrams,
+6. create student questions,
+7. create answer keys in evidence/deduction/marks table format,
+8. check formulae and chemistry.
 
 ## 5. What to ask Codex
 

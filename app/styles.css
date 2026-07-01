@@ -207,6 +207,7 @@ p {
 
 .chip.disabled {
   opacity: 0.42;
+  cursor: not-allowed;
 }
 
 .compact .chip {

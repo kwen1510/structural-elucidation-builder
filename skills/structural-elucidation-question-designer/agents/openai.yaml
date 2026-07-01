@@ -1,4 +1,4 @@
 interface:
   display_name: "Structural Elucidation Question Designer"
-  short_description: "Design 9476 elucidation questions"
-  default_prompt: "Use $structural-elucidation-question-designer to create a 9476-aligned structural elucidation worksheet with rendered structures."
+  short_description: "Design 9476 elucidation questions with checked structures"
+  default_prompt: "Use $structural-elucidation-question-designer to create a 9476-aligned structural elucidation worksheet with rendered structures and evidence/deduction answer tables."

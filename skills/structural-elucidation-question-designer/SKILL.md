@@ -13,6 +13,7 @@ Create 9476-aligned structural elucidation questions by starting from the answer
    - Read `references/9476-boundaries.md` as the compact allowed/excluded checklist.
    - If the user has locally provided `references/syllabus/9476-organic-chemistry-extract.md`, read it as the detailed syllabus grounding source.
    - If the detailed local extract does not support a requested reaction, test, term, or assumption, treat it as outside routine 9476 unless the question explicitly supplies it as new data.
+   - If `question_mode` is `provided_unfamiliar_reaction`, also read `references/provided-unfamiliar-reactions.md`.
 2. Choose the target structure or reaction network first.
 3. Write SMILES for every target/product/intermediate structure that needs a diagram.
 4. Validate and draw structures with RDKit.
@@ -35,9 +36,20 @@ Create 9476-aligned structural elucidation questions by starting from the answer
 8. Check the final question:
    - all chemistry is 9476-allowed
    - all selected clues can be traced to `references/9476-boundaries.md`, a locally supplied syllabus extract, or explicitly supplied question data
+   - no more than one non-syllabus reaction pattern is supplied per question
    - all SMILES parse in RDKit
    - formulae match question text
    - the intended answer is unique unless the question asks for possible structures
+
+## Supplied Unfamiliar Reaction Mode
+
+Use this mode only when the prompt or JSON asks for `provided_unfamiliar_reaction`.
+
+- The unfamiliar reaction must be taught in the question stem using a simple example or generic scheme.
+- The supplied pattern is treated as data, not recall. Do not require students to know its name or mechanism.
+- Use only one supplied non-syllabus pattern in each question. All other clues and transformations must be 9476-allowed.
+- In the answer key, include a "Supplied reaction pattern" row or note explaining what is added, removed, connected, broken, or converted.
+- If a non-syllabus reaction is not explicitly supplied in the stem, reject it or replace it with a 9476 reaction.
 
 ## Structure Drawing
 
@@ -111,6 +123,7 @@ Question families to support:
 - aromatic side-chain oxidation
 - amide/nitrile hydrolysis
 - chirality and cis-trans isomerism
+- provided unfamiliar reaction, where one non-syllabus pattern is explicitly taught in the stem
 
 ## Dependency Fallback
 

@@ -65,6 +65,13 @@ def main() -> None:
         qid = str(question["id"])
         lines.extend([f"### Question {index}: {question.get('title', qid)}", ""])
         lines.extend([str(question["student_prompt"]).strip(), ""])
+        provided = question.get("provided_reaction")
+        if provided:
+            lines.extend(["**Supplied reaction pattern**", ""])
+            if provided.get("student_pattern"):
+                lines.extend([str(provided["student_pattern"]).strip(), ""])
+            elif provided.get("label"):
+                lines.extend([str(provided["label"]).strip(), ""])
         visible = [item for item in by_question[qid] if item.get("show_in_question")]
         if visible:
             lines.extend(["**Structures provided in the question**", ""])
@@ -81,14 +88,39 @@ def main() -> None:
 
         clue_map = question.get("clue_map", [])
         if clue_map:
-            lines.extend(["| Observation | Deduction |", "|---|---|"])
+            has_marks = any("marks" in clue or "note" in clue for clue in clue_map)
+            if has_marks:
+                lines.extend(["| Evidence | Deductions | Marks |", "|---|---|---|"])
+            else:
+                lines.extend(["| Evidence | Deductions |", "|---|---|"])
             for clue in clue_map:
-                lines.append(f"| {clue.get('observation', '')} | {clue.get('deduction', '')} |")
+                deduction = str(clue.get("deduction", ""))
+                if clue.get("note"):
+                    deduction = f"{deduction}<br><em>Note: {clue['note']}</em>"
+                if has_marks:
+                    lines.append(f"| {clue.get('observation', '')} | {deduction} | {clue.get('marks', '')} |")
+                else:
+                    lines.append(f"| {clue.get('observation', '')} | {deduction} |")
             lines.append("")
+
+        provided = question.get("provided_reaction")
+        if provided and provided.get("answer_pattern"):
+            lines.extend(["**Supplied reaction pattern explanation**", "", str(provided["answer_pattern"]).strip(), ""])
 
         if question.get("answer_key"):
             for item in question["answer_key"]:
                 lines.append(f"- {item}")
+            lines.append("")
+
+        if question.get("mark_scheme"):
+            scheme = question["mark_scheme"]
+            lines.extend(["**Mark scheme summary**", ""])
+            if "deduction_max" in scheme:
+                lines.append(f"- Deductions: max {scheme['deduction_max']}")
+            if "structure_marks" in scheme:
+                lines.append(f"- Structures: {scheme['structure_marks']}")
+            if scheme.get("notes"):
+                lines.append(f"- Notes: {scheme['notes']}")
             lines.append("")
 
         structures = by_question[qid]

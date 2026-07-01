@@ -2,11 +2,11 @@ export const catalog = {
   syllabus: "Singapore-Cambridge H2 Chemistry 9476",
   excluded: [
     "IR/NMR/MS spectroscopy",
-    "ozonolysis",
-    "Grignard reagents",
+    "ozonolysis unless explicitly supplied as the one unfamiliar pattern",
+    "Grignard/organometallic reactions unless explicitly supplied as the one unfamiliar pattern",
     "E/Z nomenclature",
     "diastereomer terminology",
-    "advanced named reactions outside 9476"
+    "advanced named reactions outside 9476 unless explicitly supplied as data"
   ],
   presets: [
     {
@@ -21,7 +21,9 @@ export const catalog = {
       difficulty: 3,
       questionCount: 2,
       outputFormat: "pdf",
-      structureStyle: "black_rdkit_with_product_diagrams"
+      structureStyle: "black_rdkit_with_product_diagrams",
+      questionMode: "standard_9476",
+      providedReactions: []
     },
     {
       id: "aromatic-side-chain",
@@ -34,7 +36,9 @@ export const catalog = {
       difficulty: 4,
       questionCount: 2,
       outputFormat: "pdf",
-      structureStyle: "black_rdkit_with_product_diagrams"
+      structureStyle: "black_rdkit_with_product_diagrams",
+      questionMode: "standard_9476",
+      providedReactions: []
     },
     {
       id: "hydrolysis-network",
@@ -47,7 +51,9 @@ export const catalog = {
       difficulty: 5,
       questionCount: 1,
       outputFormat: "pdf",
-      structureStyle: "black_rdkit_with_product_diagrams"
+      structureStyle: "black_rdkit_with_product_diagrams",
+      questionMode: "standard_9476",
+      providedReactions: []
     },
     {
       id: "alkene-isomerism",
@@ -60,7 +66,25 @@ export const catalog = {
       difficulty: 4,
       questionCount: 2,
       outputFormat: "pdf",
-      structureStyle: "black_rdkit_with_product_diagrams"
+      structureStyle: "black_rdkit_with_product_diagrams",
+      questionMode: "standard_9476",
+      providedReactions: []
+    },
+    {
+      id: "provided-unfamiliar-reaction",
+      label: "Supplied reaction pattern",
+      badge: "Challenge",
+      description: "Adds one non-syllabus pattern taught in the stem, then tests 9476 deductions around it.",
+      chapters: ["alkenes", "carbonyls", "alcohols", "arenes"],
+      tests: ["formula-aromatic", "bromine-organic", "dnph", "iodoform", "kmno4-cleavage", "sodium-carbonate"],
+      skills: ["provided_unfamiliar_reaction", "pattern_transfer", "functional_group_deduction", "oxidation_products", "negative_clue_elimination"],
+      styles: ["paragraph_heavy", "with_product_diagram", "supplied_pattern_box"],
+      difficulty: 6,
+      questionCount: 1,
+      outputFormat: "pdf",
+      structureStyle: "black_rdkit_with_product_diagrams",
+      questionMode: "provided_unfamiliar_reaction",
+      providedReactions: ["wacker-terminal-alkene"]
     }
   ],
   chapters: [
@@ -149,6 +173,56 @@ export const catalog = {
     { id: "nitrile-hydrolysis", label: "nitrile hydrolysis", chapter: "nitriles", deduction: "carboxylic acid product" },
     { id: "nitrile-reduction", label: "nitrile reduction", chapter: "nitriles", deduction: "amine product" }
   ],
+  providedReactions: [
+    {
+      id: "wacker-terminal-alkene",
+      label: "Wacker-type terminal alkene",
+      shortLabel: "terminal alkene -> methyl ketone",
+      student_pattern: "RCH=CH2 + [O] -> RCOCH3. The terminal C=C bond is converted into a methyl ketone. No carbon atoms are lost.",
+      answer_pattern: "Break no carbon-carbon bonds. Convert the substituted alkene carbon into the carbonyl carbon and the terminal alkene carbon into the CH3 group of -COCH3.",
+      validation: "Product formula must keep the same carbon count and gain one O relative to the alkene."
+    },
+    {
+      id: "epoxide-opening",
+      label: "Epoxide ring opening",
+      shortLabel: "epoxide -> 1,2-diol",
+      student_pattern: "An epoxide is a three-membered cyclic ether. In acidified water it opens to form a 1,2-diol.",
+      answer_pattern: "Break one C-O bond in the strained ring and add H/OH across the opening to give adjacent alcohol groups.",
+      validation: "Carbon skeleton is unchanged; product contains two neighbouring alcohol groups."
+    },
+    {
+      id: "organolithium-carbonyl",
+      label: "Organolithium addition",
+      shortLabel: "C=O + R-Li -> alcohol",
+      student_pattern: "R-Li reacts with an aldehyde or ketone, then H+, to form an alcohol. The R group bonds to the carbonyl carbon.",
+      answer_pattern: "Make a new C-C bond from R to the carbonyl carbon and convert C=O into C-OH after acid work-up.",
+      validation: "Carbon count increases by the carbon count of R; the former carbonyl carbon becomes alcohol-bearing."
+    },
+    {
+      id: "ritter-amide",
+      label: "Ritter-type amide formation",
+      shortLabel: "alcohol + nitrile -> amide",
+      student_pattern: "In acid, an alcohol and a nitrile can combine to form an N-alkylamide.",
+      answer_pattern: "Connect the alcohol-derived carbon skeleton to nitrogen and convert the nitrile carbon into the amide carbonyl carbon.",
+      validation: "Product must contain an amide and must account for both starting fragments."
+    },
+    {
+      id: "wittig-alkene",
+      label: "Wittig-type alkene formation",
+      shortLabel: "C=O + ylide -> C=C",
+      student_pattern: "A carbonyl compound reacts with an ylide to form an alkene. The C=O oxygen is removed and the ylide carbon forms a C=C bond to the former carbonyl carbon.",
+      answer_pattern: "Replace C=O with C=C and connect the former carbonyl carbon to the ylide carbon.",
+      validation: "Organic product loses the carbonyl O and gains the ylide carbon fragment."
+    },
+    {
+      id: "supplied-ozone-cleavage",
+      label: "Supplied ozone cleavage",
+      shortLabel: "C=C cut into carbonyl fragments",
+      student_pattern: "Ozone can convert a C=C bond into two C=O-containing fragments. The C=C bond is cut.",
+      answer_pattern: "Break the C=C bond. Each alkene carbon becomes a carbonyl carbon, revealing the groups attached to the original alkene.",
+      validation: "Products must account for every carbon from the original alkene; do not assume ozonolysis unless this pattern is shown."
+    }
+  ],
   skills: [
     { id: "functional_group_deduction", label: "Functional group deduction" },
     { id: "negative_clue_elimination", label: "Using negative clues" },
@@ -157,13 +231,16 @@ export const catalog = {
     { id: "isomerism", label: "cis-trans / optical activity" },
     { id: "side_chain_mapping", label: "Aromatic side-chain mapping" },
     { id: "multi_compound_network", label: "Multi-compound network" },
-    { id: "possible_structures", label: "Possible structures / ambiguity" }
+    { id: "possible_structures", label: "Possible structures / ambiguity" },
+    { id: "provided_unfamiliar_reaction", label: "Supplied unfamiliar reaction" },
+    { id: "pattern_transfer", label: "Pattern transfer from example" }
   ],
   styles: [
     { id: "paragraph_heavy", label: "Paragraph-heavy exam style" },
     { id: "with_product_diagram", label: "Include product diagram" },
     { id: "one_unknown", label: "Single unknown" },
     { id: "network", label: "A-D / H-J-K-L network" },
-    { id: "scaffolded", label: "Scaffolded with subparts" }
+    { id: "scaffolded", label: "Scaffolded with subparts" },
+    { id: "supplied_pattern_box", label: "Show supplied reaction example" }
   ]
 };

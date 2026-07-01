@@ -29,6 +29,18 @@ When there is any doubt, use the official 9476 syllabus or a locally supplied ex
 - Advanced spectroscopy or unsupported named reactions.
 - Detailed practical execution of 2,4-DNPH, PCl5, or phenol tests beyond theory observations.
 
+## Supplied Data Exception
+
+An unsupported named or unfamiliar reaction may be used only as a supplied-data pattern:
+
+- the student-facing stem must show a simple example or generic transformation;
+- the unfamiliar pattern must be the only non-syllabus reaction in that question;
+- students must be asked to apply the pattern, not recall the name or mechanism;
+- the answer key must describe what is added, removed, connected, broken, or converted;
+- all other clues must remain within 9476.
+
+For examples and validation rules, read `provided-unfamiliar-reactions.md`.
+
 ## Design Guardrails
 
 - Use 4-6 clues for a full structural elucidation question.
