@@ -1,8 +1,12 @@
 # Structural Elucidation Builder
 
-![One-shot guide to using the Structural Elucidation Builder](assets/structural-elucidation-builder-guide.gif)
+<p align="center">
+  <img src="assets/structural-elucidation-builder-guide.gif" width="920" alt="One-shot guide to using the Structural Elucidation Builder">
+</p>
 
-[Download the MP4 guide](assets/structural-elucidation-builder-guide.mp4)
+<p align="center">
+  <a href="assets/structural-elucidation-builder-guide.mp4">Download the MP4 guide</a>
+</p>
 
 This repo contains:
 
